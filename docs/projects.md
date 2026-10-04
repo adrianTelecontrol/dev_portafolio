@@ -16,8 +16,20 @@ Open items for the owner are marked **TODO**.
 ## Work (adrianTelecontrol, TM4C1294 + FT812 platform)
 
 ### 1. TeleControl v4: three-board PLC-style control platform (flagship, private)
+- Company: Telecontrol, an industrial-grade development company (name may be
+  used publicly).
+- Replaces the previous Telecontrol controller generation (kept in the repo as
+  a behavioral and Modbus-compatibility reference).
 - Bare-metal platform for industrial control; reference application is an HVAC
-  controller that modernizes a legacy firmware generation.
+  controller that modernizes the legacy firmware.
+- Scope of v4.0: an internal step toward a PLC-like system, used by Telecontrol
+  to implement its own HVAC installations, not sold to external users. Frame it
+  as a platform that proved the architecture, not as a general PLC.
+- Next, v4.1 (planning stage, not implemented): intended as a full PLC
+  replacement with product-grade quality. Planned direction: same hardware,
+  encapsulated HAL, runtime-loaded reactive GUI, Lua-owned application logic,
+  and a desktop Designer (PyQt) that produces one package installed through the
+  HMI's USB port. Present on the site as "what's next", without detail.
 - Three boards:
   - **HMI**: TM4C1294 + external SDRAM + FT812 touch display. Operator UI,
     USB file loading, visualization.
