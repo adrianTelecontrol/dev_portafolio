@@ -12,7 +12,7 @@ Personal developer portfolio, deployed on Vercel.
 - No build step and no tests yet. When adding either, document the command here.
 
 ## Conventions
-- Keep it dependency-free until a feature needs a dependency.
+- Design quality comes first: add dependencies (design systems, fonts, animation or UI libraries) when they make the site look or feel better, e.g. when the `design-taste-frontend` skill recommends an official package. Prefer a lightweight option when two give the same result, and document any new install or build command here.
 - Serverless functions use CommonJS (`module.exports`) and return JSON.
 - Never commit secrets. Configure them as Vercel environment variables, and list names only in `.env.example`.
 - Pages must work at phone width and in light and dark mode.
