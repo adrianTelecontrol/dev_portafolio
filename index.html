@@ -131,7 +131,7 @@
     }
     .hero h1 {
       font-size: clamp(2.3rem, 4.6vw, 3.5rem);
-      line-height: 1.06; margin: 20px 0; max-width: 19ch;
+      line-height: 1.04; margin: 0 0 16px; max-width: 19ch;
     }
     .hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
     .hero figure { margin: 0; justify-self: center; width: 100%; max-width: 440px; }
@@ -139,6 +139,55 @@
     @media (max-width: 860px) {
       .hero .wrap { grid-template-columns: 1fr; }
     }
+
+    .hero .tagline { font-size: clamp(1.25rem, 2vw, 1.5rem); line-height: 1.35; font-weight: 500; margin: 0 0 16px; max-width: 30ch; }
+    .socials { display: flex; gap: 8px; }
+    .socials a {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 44px; height: 44px; border: 1px solid var(--line-strong);
+      color: var(--fg); text-decoration: none; font-size: 20px;
+    }
+    .socials a:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Facts strip */
+    .facts { border-top: 1px solid var(--line); }
+    .facts dl { margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .facts div { padding: 28px 24px 28px 0; }
+    .facts div + div { border-left: 1px solid var(--line); padding-left: 24px; }
+    .facts dt { font: 500 clamp(2rem, 4vw, 2.75rem)/1 var(--mono); color: var(--accent); letter-spacing: -0.02em; }
+    .facts dd { margin: 10px 0 0; color: var(--muted); font-size: 15px; max-width: 28ch; }
+    @media (max-width: 640px) {
+      .facts dl { grid-template-columns: 1fr; }
+      .facts div { padding: 18px 0; }
+      .facts div + div { border-left: 0; border-top: 1px solid var(--line); padding-left: 0; }
+    }
+
+    /* Experience */
+    .xp-list { list-style: none; margin: 32px 0 0; padding: 0; display: grid; gap: 8px; max-width: 920px; }
+    .xp {
+      display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 24px;
+      padding: 24px; margin: 0 -24px; border: 1px solid transparent;
+      transition: background .25s var(--ease), border-color .25s var(--ease);
+    }
+    .xp:hover { background: var(--surface); border-color: var(--line); }
+    .xp .when { font: 400 13px/1.6 var(--mono); color: var(--muted); padding-top: 3px; }
+    .xp h3 { font-size: 1.15rem; letter-spacing: -0.01em; }
+    .xp .org { color: var(--accent); }
+    .xp p { color: var(--muted); margin-top: 8px; max-width: 62ch; }
+    .xp .tags { margin-top: 14px; padding-top: 0; }
+    .resume-link { display: inline-flex; gap: 6px; align-items: center; margin-top: 24px; font-weight: 500; color: var(--fg); }
+    @media (max-width: 640px) {
+      .xp { grid-template-columns: 1fr; gap: 6px; padding: 18px 16px; margin: 0 -16px; }
+    }
+
+    /* Confidentiality note */
+    .note {
+      margin-top: 24px; max-width: 65ch; padding: 16px 18px;
+      border-left: 2px solid var(--accent); background: var(--surface-2);
+      display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px;
+    }
+    .note i { font-size: 20px; color: var(--accent); margin-top: 2px; }
+    .note p { color: var(--fg); font-size: 15px; }
 
     /* Diagrams */
     svg.diagram { width: 100%; height: auto; display: block; overflow: visible; }
@@ -180,7 +229,7 @@
     }
     .hl { padding: 28px 0; border-top: 1px solid var(--line-strong); }
     .hl i { font-size: 24px; color: var(--accent); }
-    .hl h3 { font-size: 1.15rem; margin: 14px 0 8px; letter-spacing: -0.01em; }
+    .hl h3 { font-size: 1.15rem; margin: 14px 0 8px; letter-spacing: -0.01em; max-width: 34ch; }
     .hl p { color: var(--muted); max-width: 52ch; }
     .next {
       margin-top: 24px; padding: 18px 20px;
@@ -246,7 +295,8 @@
     }
 
     /* About */
-    .about .wrap { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); gap: 56px; }
+    .about .wrap { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); gap: 56px; align-items: start; }
+    .about .slot { aspect-ratio: 4 / 5; max-width: 360px; }
     .about .body { margin-top: 20px; font-size: 1.0625rem; }
     .about .body + .body { margin-top: 14px; }
     .timeline { list-style: none; margin: 0; padding: 0; }
@@ -282,6 +332,7 @@
     <div class="wrap">
       <a class="brand" href="#top">Adrian Pulido</a>
       <nav class="nav-links" aria-label="Primary">
+        <a href="#experience" data-i18n="nav.experience">Experience</a>
         <a href="#projects" data-i18n="nav.projects">Projects</a>
         <a href="#about" data-i18n="nav.about">About</a>
         <a href="#contact" data-i18n="nav.contact">Contact</a>
@@ -302,12 +353,19 @@
     <section class="hero">
       <div class="wrap">
         <div>
-          <p class="eyebrow rise" style="--i:0" data-i18n="hero.eyebrow">Embedded software engineer</p>
-          <h1 class="rise" style="--i:1" data-i18n="hero.title">Firmware from the I/O pin to the touchscreen.</h1>
-          <p class="lead rise" style="--i:2" data-i18n="hero.lead">I'm Adrian Pulido. I build bare-metal control platforms, graphics engines and robots on ARM Cortex-M, MSP430 and ESP32.</p>
+          <h1 class="rise" style="--i:0">Adrian Pulido</h1>
+          <p class="tagline rise" style="--i:1" data-i18n="hero.tagline">Embedded software engineer. Firmware from the I/O pin to the touchscreen.</p>
+          <p class="lead rise" style="--i:2" data-i18n="hero.lead">I build bare-metal control platforms, graphics engines and robots on ARM Cortex-M, MSP430 and ESP32.</p>
           <div class="ctas rise" style="--i:3">
             <a class="btn btn-primary" href="#projects"><span data-i18n="cta.projects">View projects</span> <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
             <a class="btn btn-ghost" href="#contact" data-i18n="cta.contact">Contact</a>
+            <div class="socials">
+              <a href="https://github.com/audience6killer" target="_blank" rel="noopener" aria-label="GitHub"><i class="ph ph-github-logo" aria-hidden="true"></i></a>
+              <!-- TODO: LinkedIn URL -->
+              <a href="#" target="_blank" rel="noopener" aria-label="LinkedIn" hidden><i class="ph ph-linkedin-logo" aria-hidden="true"></i></a>
+              <!-- TODO: CV PDF -->
+              <a href="#" target="_blank" rel="noopener" aria-label="CV (PDF)" hidden><i class="ph ph-file-pdf" aria-hidden="true"></i></a>
+            </div>
           </div>
         </div>
 
@@ -355,29 +413,42 @@
       </div>
     </section>
 
-    <section class="section toolkit" aria-labelledby="toolkit-title">
+
+    <section class="facts" aria-label="In numbers">
       <div class="wrap">
-        <div class="reveal">
-          <h2 id="toolkit-title" data-i18n="toolkit.title">What I work with</h2>
-        </div>
-        <div class="groups reveal">
-          <div class="group">
-            <h3 data-i18n="toolkit.mcu">Microcontrollers</h3>
-            <div class="chips"><span class="chip">TM4C1294 (Cortex-M4F)</span><span class="chip">MSP430F248</span><span class="chip">ESP32</span></div>
-          </div>
-          <div class="group">
-            <h3 data-i18n="toolkit.periph">Peripherals and displays</h3>
-            <div class="chips"><span class="chip">EPI SDRAM</span><span class="chip">uDMA</span><span class="chip">QuadSPI</span><span class="chip">FT812 / EVE</span><span class="chip">ADS1216</span><span class="chip">PCNT</span><span class="chip">MCPWM</span></div>
-          </div>
-          <div class="group">
-            <h3 data-i18n="toolkit.proto">Protocols</h3>
-            <div class="chips"><span class="chip">UART</span><span class="chip">SPI</span><span class="chip">CAN</span><span class="chip">RS-485 Modbus RTU</span><span class="chip">LoRa</span><span class="chip">USB MSC</span></div>
-          </div>
-          <div class="group">
-            <h3 data-i18n="toolkit.sw">Languages and runtimes</h3>
-            <div class="chips"><span class="chip">C</span><span class="chip">C++</span><span class="chip">Embedded Lua</span><span class="chip">FreeRTOS</span><span class="chip">ESP-IDF</span><span class="chip">Python / PyQt</span></div>
-          </div>
-        </div>
+        <dl class="reveal">
+          <div><dt>3</dt><dd data-i18n="facts.boards">boards in one control platform, all bare-metal</dd></div>
+          <div><dt>3</dt><dd data-i18n="facts.products">products built on one graphics engine</dd></div>
+          <div><dt>~20</dt><dd data-i18n="facts.protos">hardware prototypes behind that engine</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="section" id="experience" aria-labelledby="xp-title">
+      <div class="wrap">
+        <h2 id="xp-title" class="reveal" data-i18n="xp.title">Experience</h2>
+        <ol class="xp-list">
+          <li class="xp reveal">
+            <!-- TODO: start date at Telecontrol, e.g. "2024 - Present" -->
+            <p class="when" data-i18n="xp.job.when">Present</p>
+            <div>
+              <h3><span data-i18n="xp.job.role">Embedded software developer</span> <span class="org">· Telecontrol</span></h3>
+              <p data-i18n="xp.job.p">Sole developer and tester of the company's new control platform: firmware for three boards, an embedded Lua runtime, the output safety supervisor and a reusable graphics engine, plus the desktop and test tooling around them. Also wrote the firmware for a UL overcurrent test bench.</p>
+              <div class="tags"><span class="tag">TM4C1294</span><span class="tag">MSP430</span><span class="tag">C</span><span class="tag">Lua</span><span class="tag">FT812</span><span class="tag">CAN</span><span class="tag">Modbus RTU</span><span class="tag">PyQt</span></div>
+            </div>
+          </li>
+          <li class="xp reveal">
+            <!-- TODO: university, degree name and graduation year -->
+            <p class="when" data-i18n="xp.thesis.when">Thesis</p>
+            <div>
+              <h3 data-i18n="xp.thesis.role">Engineering degree, thesis project</h3>
+              <p data-i18n="xp.thesis.p">Wrote most of the firmware for an autonomous seed-planting robot built by a team of four: FreeRTOS tasks on an ESP32 for PID traction control, odometry, waypoint navigation, the planting mechanism and LoRa telemetry.</p>
+              <div class="tags"><span class="tag">ESP32</span><span class="tag">FreeRTOS</span><span class="tag">C / C++</span><span class="tag">PID</span><span class="tag">LoRa</span></div>
+            </div>
+          </li>
+        </ol>
+        <!-- TODO: CV PDF link -->
+        <a class="resume-link" href="#" target="_blank" rel="noopener" hidden><span data-i18n="xp.resume">View full résumé</span> <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
       </div>
     </section>
 
@@ -388,28 +459,32 @@
           <h2 id="featured-title" data-i18n="featured.title">TeleControl v4: a three-board control platform</h2>
           <p class="meta"><strong>Telecontrol</strong><br><span data-i18n="featured.meta">Sole developer and tester. Internal platform for the company's HVAC installations.</span></p>
           <p class="body" data-i18n="featured.body">The successor to Telecontrol's previous controller: an HMI, a scriptable controller and an I/O board that supervises every output, all bare-metal on TM4C1294 and MSP430.</p>
+          <div class="note">
+            <i class="ph ph-lock-simple" aria-hidden="true"></i>
+            <p data-i18n="featured.note">The platform is proprietary, so there is no code or repository here. What I can share is how it is built and why: the architecture and the engineering decisions behind it.</p>
+          </div>
         </div>
 
         <div class="highlights">
           <article class="hl reveal">
             <i class="ph ph-shield-check" aria-hidden="true"></i>
-            <h3 data-i18n="hl.safety.t">Safety lives in the I/O board</h3>
-            <p data-i18n="hl.safety.p">Minimum-on, maximum-on and cooldown limits per output, a latched emergency stop, and safe outputs on link loss or stale readings. Scripts request outputs; they never own a pin.</p>
+            <h3 data-i18n="hl.safety.t">Why output safety lives on the MSP430, not in the scripts</h3>
+            <p data-i18n="hl.safety.p">Scripts change often and can fail; output safety cannot. The I/O board enforces minimum-on, maximum-on and cooldown limits per output, latches the emergency stop, and forces outputs safe on link loss or stale readings, even if the controller or HMI stops responding.</p>
           </article>
           <article class="hl reveal">
             <i class="ph ph-code" aria-hidden="true"></i>
-            <h3 data-i18n="hl.lua.t">Lua 5.5 on a Cortex-M4</h3>
-            <p data-i18n="hl.lua.p">Control logic runs as scripts in bounded scan cycles with static allocation only. Production scripts and timing maps are stored encrypted on SD and load at boot.</p>
+            <h3 data-i18n="hl.lua.t">Why the control logic runs as Lua scripts</h3>
+            <p data-i18n="hl.lua.p">Application logic should change without rebuilding the firmware. Lua 5.5 runs on the Cortex-M4 in bounded scan cycles with static allocation only, and production scripts and timing maps are stored encrypted on SD.</p>
           </article>
           <article class="hl reveal">
             <i class="ph ph-arrows-left-right" aria-hidden="true"></i>
-            <h3 data-i18n="hl.proto.t">Versioned wire protocols</h3>
-            <p data-i18n="hl.proto.p">UART between HMI and controller, SPI to the I/O board, RS-485 Modbus RTU to field devices. Both ends of a link change together.</p>
+            <h3 data-i18n="hl.proto.t">Why every link carries a protocol version</h3>
+            <p data-i18n="hl.proto.p">Three boards are flashed separately, so a version mismatch is a real failure mode. The UART, SPI and RS-485 Modbus RTU links are versioned contracts, and both ends always change together.</p>
           </article>
           <article class="hl reveal">
             <i class="ph ph-flask" aria-hidden="true"></i>
-            <h3 data-i18n="hl.test.t">Tested before it reaches a board</h3>
-            <p data-i18n="hl.test.p">Host-side C unit tests with mocks, a PyQt HVAC plant simulator wired to the real controller, and architecture decision records.</p>
+            <h3 data-i18n="hl.test.t">Why testing starts off the board</h3>
+            <p data-i18n="hl.test.p">Bench time is limited and failures on site are expensive. Host-side C unit tests with mocks and a PyQt HVAC plant simulator wired to the real controller catch logic errors first, and design decisions are recorded as architecture decision records.</p>
           </article>
         </div>
 
@@ -480,8 +555,8 @@
           </article>
 
           <article class="cell c-robot reveal">
-            <!-- TODO: photo of the Cornelio robot in the field, 4:3 -->
-            <div class="visual"><figure class="slot"><i class="ph ph-camera" aria-hidden="true"></i><span data-i18n="slot.photo">Photo coming soon</span></figure></div>
+            <!-- TODO: short video or GIF of the Cornelio robot driving and planting (muted, looping, with poster image) -->
+            <div class="visual"><figure class="slot"><i class="ph ph-video-camera" aria-hidden="true"></i><span data-i18n="slot.video">Video coming soon</span></figure></div>
             <div class="text">
               <h3 data-i18n="robot.t">Autonomous seed-planting robot</h3>
               <p data-i18n="robot.p">My engineering thesis, built with a team of four; I wrote most of the firmware. The ESP32 master runs FreeRTOS tasks for traction PID, odometry, waypoint navigation and the planting mechanism, with LoRa telemetry to a base station.</p>
@@ -510,20 +585,34 @@
           <p class="body" data-i18n="about.p1">I'm an embedded software engineer in Mexico City. At Telecontrol I design, write and test the firmware and tools behind the company's control platforms, from the safety supervisor to the touchscreen.</p>
           <p class="body" data-i18n="about.p2">I care about firmware that stays predictable under failure: bounded loops, static memory, versioned protocols, and documentation good enough for the next engineer to change it safely.</p>
         </div>
-        <ol class="timeline reveal">
-          <li>
-            <!-- TODO: start date at Telecontrol -->
-            <p class="when" data-i18n="tl.now">Present</p>
-            <h3 data-i18n="tl.job.t">Embedded software developer, Telecontrol</h3>
-            <p data-i18n="tl.job.p">Control platforms, a graphics engine, test equipment firmware and desktop tooling.</p>
-          </li>
-          <li>
-            <!-- TODO: university, degree name and year -->
-            <p class="when" data-i18n="tl.thesis.when">Thesis</p>
-            <h3 data-i18n="tl.thesis.t">Engineering degree</h3>
-            <p data-i18n="tl.thesis.p">Thesis: firmware for an autonomous seed-planting robot.</p>
-          </li>
-        </ol>
+        <!-- TODO: portrait photo, 4:5 -->
+        <figure class="slot reveal"><i class="ph ph-user" aria-hidden="true"></i><span data-i18n="slot.portrait">Portrait coming soon</span></figure>
+      </div>
+    </section>
+
+    <section class="section toolkit" aria-labelledby="toolkit-title">
+      <div class="wrap">
+        <div class="reveal">
+          <h2 id="toolkit-title" data-i18n="toolkit.title">What I work with</h2>
+        </div>
+        <div class="groups reveal">
+          <div class="group">
+            <h3 data-i18n="toolkit.mcu">Microcontrollers</h3>
+            <div class="chips"><span class="chip">TM4C1294 (Cortex-M4F)</span><span class="chip">MSP430F248</span><span class="chip">ESP32</span></div>
+          </div>
+          <div class="group">
+            <h3 data-i18n="toolkit.periph">Peripherals and displays</h3>
+            <div class="chips"><span class="chip">EPI SDRAM</span><span class="chip">uDMA</span><span class="chip">QuadSPI</span><span class="chip">FT812 / EVE</span><span class="chip">ADS1216</span><span class="chip">PCNT</span><span class="chip">MCPWM</span></div>
+          </div>
+          <div class="group">
+            <h3 data-i18n="toolkit.proto">Protocols</h3>
+            <div class="chips"><span class="chip">UART</span><span class="chip">SPI</span><span class="chip">CAN</span><span class="chip">RS-485 Modbus RTU</span><span class="chip">LoRa</span><span class="chip">USB MSC</span></div>
+          </div>
+          <div class="group">
+            <h3 data-i18n="toolkit.sw">Languages and runtimes</h3>
+            <div class="chips"><span class="chip">C</span><span class="chip">C++</span><span class="chip">Embedded Lua</span><span class="chip">FreeRTOS</span><span class="chip">ESP-IDF</span><span class="chip">Python / PyQt</span></div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -538,7 +627,7 @@
           <a class="btn btn-ghost" href="#" hidden><i class="ph ph-linkedin-logo" aria-hidden="true"></i> LinkedIn</a>
           <a class="btn btn-ghost" href="https://github.com/audience6killer" target="_blank" rel="noopener"><i class="ph ph-github-logo" aria-hidden="true"></i> GitHub</a>
           <!-- TODO: CV PDF in English and Spanish -->
-          <a class="btn btn-ghost" href="#" hidden><i class="ph ph-file-pdf" aria-hidden="true"></i> CV</a>
+          <a class="btn btn-ghost" href="#" hidden><i class="ph ph-file-pdf" aria-hidden="true"></i> <span data-i18n="xp.resume">View full résumé</span></a>
         </div>
       </div>
     </section>
@@ -550,12 +639,26 @@
 
   <script>
     var ES = {
+      "nav.experience": "Experiencia",
       "nav.projects": "Proyectos",
       "nav.about": "Sobre mí",
       "nav.contact": "Contacto",
-      "hero.eyebrow": "Ingeniero de software embebido",
-      "hero.title": "Firmware del pin de E/S a la pantalla táctil.",
-      "hero.lead": "Soy Adrian Pulido. Desarrollo plataformas de control bare-metal, motores gráficos y robots en ARM Cortex-M, MSP430 y ESP32.",
+      "hero.tagline": "Ingeniero de software embebido. Firmware del pin de E/S a la pantalla táctil.",
+      "hero.lead": "Desarrollo plataformas de control bare-metal, motores gráficos y robots en ARM Cortex-M, MSP430 y ESP32.",
+      "facts.boards": "tarjetas en una plataforma de control, todo bare-metal",
+      "facts.products": "productos construidos sobre un mismo motor gráfico",
+      "facts.protos": "prototipos en hardware detrás de ese motor",
+      "xp.title": "Experiencia",
+      "xp.job.when": "Actualidad",
+      "xp.job.role": "Desarrollador de software embebido",
+      "xp.job.p": "Único desarrollador y tester de la nueva plataforma de control de la empresa: firmware para tres tarjetas, un runtime Lua embebido, el supervisor de seguridad de salidas y un motor gráfico reutilizable, además de las herramientas de escritorio y de prueba. También escribí el firmware de un banco de pruebas de sobrecorriente UL.",
+      "xp.thesis.when": "Tesis",
+      "xp.thesis.role": "Ingeniería, proyecto de tesis",
+      "xp.thesis.p": "Escribí la mayor parte del firmware de un robot sembrador autónomo hecho por un equipo de cuatro: tareas FreeRTOS en un ESP32 para el PID de tracción, odometría, navegación por waypoints, el mecanismo de siembra y telemetría LoRa.",
+      "xp.resume": "Ver CV completo",
+      "featured.note": "La plataforma es propietaria, así que aquí no hay código ni repositorio. Lo que sí puedo compartir es cómo está construida y por qué: la arquitectura y las decisiones de ingeniería detrás de ella.",
+      "slot.video": "Video próximamente",
+      "slot.portrait": "Retrato próximamente",
       "hero.caption": "Arquitectura de una plataforma de control que construí en Telecontrol. La tarjeta de E/S tiene la última palabra sobre cada salida física.",
       "cta.projects": "Ver proyectos",
       "cta.contact": "Contacto",
@@ -575,14 +678,14 @@
       "featured.title": "TeleControl v4: plataforma de control de tres tarjetas",
       "featured.meta": "Único desarrollador y tester. Plataforma interna para las instalaciones HVAC de la empresa.",
       "featured.body": "La sucesora del controlador anterior de Telecontrol: una HMI, un controlador programable por scripts y una tarjeta de E/S que supervisa cada salida, todo bare-metal sobre TM4C1294 y MSP430.",
-      "hl.safety.t": "La seguridad vive en la tarjeta de E/S",
-      "hl.safety.p": "Tiempos mínimo y máximo de encendido y enfriamiento por salida, paro de emergencia con enclavamiento, y salidas seguras ante pérdida de enlace o lecturas obsoletas. Los scripts solicitan salidas; nunca controlan un pin.",
-      "hl.lua.t": "Lua 5.5 en un Cortex-M4",
-      "hl.lua.p": "La lógica de control corre como scripts en ciclos de escaneo acotados, solo con memoria estática. Los scripts de producción y los mapas de tiempos se guardan cifrados en SD y se cargan al arrancar.",
-      "hl.proto.t": "Protocolos versionados",
-      "hl.proto.p": "UART entre HMI y controlador, SPI hacia la tarjeta de E/S y RS-485 Modbus RTU hacia los equipos de campo. Ambos extremos de un enlace cambian juntos.",
-      "hl.test.t": "Probado antes de llegar a una tarjeta",
-      "hl.test.p": "Pruebas unitarias en C sobre la PC con mocks, un simulador de planta HVAC en PyQt conectado al controlador real, y registros de decisiones de arquitectura.",
+      "hl.safety.t": "Por qué la seguridad de las salidas vive en el MSP430 y no en los scripts",
+      "hl.safety.p": "Los scripts cambian seguido y pueden fallar; la seguridad de las salidas no puede. La tarjeta de E/S aplica tiempos mínimo y máximo de encendido y enfriamiento por salida, enclava el paro de emergencia y lleva las salidas a estado seguro ante pérdida de enlace o lecturas obsoletas, aunque el controlador o la HMI dejen de responder.",
+      "hl.lua.t": "Por qué la lógica de control corre como scripts Lua",
+      "hl.lua.p": "La lógica de la aplicación debe poder cambiar sin recompilar el firmware. Lua 5.5 corre en el Cortex-M4 en ciclos de escaneo acotados, solo con memoria estática, y los scripts de producción y los mapas de tiempos se guardan cifrados en SD.",
+      "hl.proto.t": "Por qué cada enlace lleva una versión de protocolo",
+      "hl.proto.p": "Las tres tarjetas se programan por separado, así que una diferencia de versiones es una falla real. Los enlaces UART, SPI y RS-485 Modbus RTU son contratos versionados, y ambos extremos cambian siempre juntos.",
+      "hl.test.t": "Por qué las pruebas empiezan fuera de la tarjeta",
+      "hl.test.p": "El tiempo en banco es limitado y las fallas en sitio son caras. Pruebas unitarias en C sobre la PC con mocks y un simulador de planta HVAC en PyQt conectado al controlador real detectan errores de lógica primero, y las decisiones de diseño quedan en registros de decisiones de arquitectura.",
       "next.label": "Siguiente: v4.1",
       "next.body": "Planeada como reemplazo completo de un PLC, con calidad de producto.",
       "more.title": "Más proyectos",
@@ -612,12 +715,6 @@
       "about.title": "Sobre mí",
       "about.p1": "Soy ingeniero de software embebido en la Ciudad de México. En Telecontrol diseño, programo y pruebo el firmware y las herramientas de las plataformas de control de la empresa, desde el supervisor de seguridad hasta la pantalla táctil.",
       "about.p2": "Me importa que el firmware sea predecible ante fallas: ciclos acotados, memoria estática, protocolos versionados y documentación suficiente para que el siguiente ingeniero lo cambie con seguridad.",
-      "tl.now": "Actualidad",
-      "tl.job.t": "Desarrollador de software embebido, Telecontrol",
-      "tl.job.p": "Plataformas de control, un motor gráfico, firmware para equipo de pruebas y herramientas de escritorio.",
-      "tl.thesis.when": "Tesis",
-      "tl.thesis.t": "Ingeniería",
-      "tl.thesis.p": "Tesis: firmware para un robot sembrador autónomo.",
       "contact.title": "Busco mi siguiente puesto en software embebido.",
       "contact.body": "Si tu equipo desarrolla firmware para hardware real, me gustaría saber de ti."
     };
