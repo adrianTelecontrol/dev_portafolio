@@ -6,6 +6,7 @@ Personal developer portfolio, deployed on Vercel.
 - `index.html`: the site (single static page, no build step)
 - `api/*.js`: Vercel serverless functions, each served at `/api/<name>`
 - `vercel.json`: Vercel config (keep minimal)
+- `docs/projects.md`: project inventory used as source for the site content. Work projects are confidential: keep architecture/technique level, no code or private links
 
 ## Commands
 - `npm run dev`: run locally with `vercel dev` (needs a Vercel login, so not available in cloud sessions)
