@@ -3,45 +3,692 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dev Portfolio</title>
+  <title>Adrian Pulido, embedded software engineer</title>
+  <meta name="description" content="Adrian Pulido builds bare-metal control platforms, graphics engines and robots on ARM Cortex-M, MSP430 and ESP32.">
+  <meta name="color-scheme" content="light dark">
+  <script>
+    // Apply saved theme before first paint to avoid a flash.
+    try { var t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+    document.documentElement.classList.add("js");
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
   <style>
-    :root { --bg: #ffffff; --fg: #1a1a1a; --muted: #666666; --accent: #2563eb; }
+    :root {
+      --bg: #f5f6f7;
+      --surface: #ffffff;
+      --surface-2: #eceef1;
+      --fg: #16181b;
+      --muted: #5b616b;
+      --line: #dcdfe4;
+      --line-strong: #b4bac4;
+      --accent: #b8430f;
+      --accent-fg: #ffffff;
+      --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+      --max: 1200px;
+      --gutter: clamp(16px, 4vw, 40px);
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
     @media (prefers-color-scheme: dark) {
-      :root { --bg: #111111; --fg: #f2f2f2; --muted: #9a9a9a; --accent: #60a5fa; }
+      :root:not([data-theme="light"]) {
+        --bg: #0f1113;
+        --surface: #16191c;
+        --surface-2: #1d2125;
+        --fg: #e9ebee;
+        --muted: #9aa1ab;
+        --line: #272c31;
+        --line-strong: #3d434b;
+        --accent: #f0874f;
+        --accent-fg: #1a0d05;
+      }
     }
+    :root[data-theme="dark"] {
+      --bg: #0f1113;
+      --surface: #16191c;
+      --surface-2: #1d2125;
+      --fg: #e9ebee;
+      --muted: #9aa1ab;
+      --line: #272c31;
+      --line-strong: #3d434b;
+      --accent: #f0874f;
+      --accent-fg: #1a0d05;
+    }
+
     * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
     body {
-      margin: 0; background: var(--bg); color: var(--fg);
-      font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font: 400 16px/1.6 var(--sans);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
-    main { max-width: 40rem; margin: 0 auto; padding: 4rem 1rem; }
-    h1 { margin: 0 0 .25rem; font-size: 2rem; }
-    p.lead { margin: 0 0 2rem; color: var(--muted); }
-    h2 { margin: 2rem 0 .5rem; font-size: 1.1rem; }
-    a { color: var(--accent); }
-    code { font-family: ui-monospace, Menlo, Consolas, monospace; }
+    a { color: inherit; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.02em; }
+    p { margin: 0; }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+    .mono { font-family: var(--mono); }
+    .eyebrow {
+      font: 500 12px/1 var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+    }
+    .lead { color: var(--muted); font-size: 1.125rem; max-width: 58ch; }
+    .body { color: var(--muted); max-width: 65ch; }
+
+    /* Navigation */
+    .nav {
+      position: sticky; top: 0; z-index: 10;
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav .wrap { height: 64px; display: flex; align-items: center; gap: 24px; }
+    .brand { font-weight: 600; text-decoration: none; letter-spacing: -0.01em; margin-right: auto; }
+    .nav-links { display: flex; gap: 24px; }
+    .nav-links a { text-decoration: none; color: var(--muted); font-size: 15px; }
+    .nav-links a:hover { color: var(--fg); }
+    .tools { display: flex; align-items: center; gap: 8px; }
+    .lang { display: flex; border: 1px solid var(--line-strong); }
+    .lang button, .icon-btn {
+      font: 500 12px/1 var(--mono);
+      background: none; border: 0; color: var(--muted);
+      padding: 8px 10px; cursor: pointer;
+    }
+    .lang button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+    .icon-btn { border: 1px solid var(--line-strong); font-size: 16px; padding: 6px 8px; color: var(--fg); }
+    @media (max-width: 720px) { .nav-links { display: none; } }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 18px; font: 500 15px/1 var(--sans);
+      text-decoration: none; white-space: nowrap;
+      border: 1px solid var(--fg);
+      transition: transform .2s var(--ease), background .2s, color .2s;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary { background: var(--fg); color: var(--bg); }
+    .btn-primary:hover { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
+    .btn-ghost { color: var(--fg); }
+    .btn-ghost:hover { background: var(--surface-2); }
+
+    /* Hero */
+    .hero { padding: clamp(40px, 7vw, 88px) 0 clamp(48px, 7vw, 96px); }
+    .hero .wrap {
+      display: grid; gap: 48px; align-items: center;
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    }
+    .hero h1 {
+      font-size: clamp(2.3rem, 4.6vw, 3.5rem);
+      line-height: 1.06; margin: 20px 0; max-width: 19ch;
+    }
+    .hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+    .hero figure { margin: 0; justify-self: center; width: 100%; max-width: 440px; }
+    .hero figcaption { margin-top: 12px; font: 400 13px/1.5 var(--mono); color: var(--muted); }
+    @media (max-width: 860px) {
+      .hero .wrap { grid-template-columns: 1fr; }
+    }
+
+    /* Diagrams */
+    svg.diagram { width: 100%; height: auto; display: block; overflow: visible; }
+    .d-box { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1.2; }
+    .d-box.accent { stroke: var(--accent); stroke-width: 1.6; }
+    .d-ghost { fill: none; stroke: var(--line-strong); stroke-dasharray: 4 4; }
+    .d-title { font: 600 14px var(--sans); fill: var(--fg); }
+    .d-sub { font: 400 11px var(--mono); fill: var(--muted); }
+    .d-link { stroke: var(--line-strong); stroke-width: 1.4; fill: none; }
+    .d-label { font: 500 11px var(--mono); fill: var(--accent); letter-spacing: 0.04em; }
+    .d-arrow { fill: var(--line-strong); }
+    .packet { fill: var(--accent); }
+
+    /* Sections */
+    section { scroll-margin-top: 72px; }
+    .section { padding: clamp(56px, 8vw, 112px) 0; border-top: 1px solid var(--line); }
+    .section h2 { font-size: clamp(1.75rem, 3vw, 2.4rem); line-height: 1.15; }
+
+    /* Toolkit */
+    .toolkit .wrap { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 48px; }
+    .toolkit .groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 40px; }
+    .group h3 { font: 500 13px/1 var(--mono); color: var(--muted); letter-spacing: 0.02em; margin-bottom: 12px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip { font: 400 13px/1 var(--mono); padding: 7px 9px; background: var(--surface-2); }
+    @media (max-width: 860px) {
+      .toolkit .wrap { grid-template-columns: 1fr; gap: 32px; }
+    }
+    @media (max-width: 560px) {
+      .toolkit .groups { grid-template-columns: 1fr; }
+    }
+
+    /* Featured case study */
+    .featured h2 { margin: 16px 0 12px; max-width: 24ch; }
+    .meta { font: 400 13px/1.6 var(--mono); color: var(--muted); margin-bottom: 20px; }
+    .meta strong { color: var(--fg); font-weight: 500; }
+    .highlights {
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 48px; margin-top: 48px;
+    }
+    .hl { padding: 28px 0; border-top: 1px solid var(--line-strong); }
+    .hl i { font-size: 24px; color: var(--accent); }
+    .hl h3 { font-size: 1.15rem; margin: 14px 0 8px; letter-spacing: -0.01em; }
+    .hl p { color: var(--muted); max-width: 52ch; }
+    .next {
+      margin-top: 24px; padding: 18px 20px;
+      background: var(--surface-2);
+      display: flex; gap: 12px; align-items: baseline;
+    }
+    .next .mono { color: var(--accent); font-size: 13px; white-space: nowrap; }
+    @media (max-width: 760px) {
+      .highlights { grid-template-columns: 1fr; }
+      .next { flex-direction: column; gap: 6px; }
+    }
+
+    /* Projects bento */
+    .bento {
+      display: grid; gap: 16px; margin-top: 40px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-areas:
+        "gfx gfx ul"
+        "gfx gfx studio"
+        "robot robot player";
+    }
+    .cell {
+      background: var(--surface); border: 1px solid var(--line);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .cell .visual { border-bottom: 1px solid var(--line); }
+    .cell .text { padding: 22px 24px 24px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+    .cell h3 { font-size: 1.15rem; letter-spacing: -0.01em; }
+    .cell p { color: var(--muted); font-size: 15px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 8px; }
+    .tag { font: 400 12px/1 var(--mono); color: var(--muted); border: 1px solid var(--line-strong); padding: 5px 7px; }
+    .cell .link { display: inline-flex; gap: 6px; align-items: center; font: 500 14px var(--sans); color: var(--accent); text-decoration: none; }
+    .cell .link:hover { text-decoration: underline; }
+    .c-gfx { grid-area: gfx; }
+    .c-gfx .visual {
+      flex: 1; display: flex; align-items: center;
+      padding: clamp(20px, 4vw, 44px);
+      background:
+        radial-gradient(circle at 1px 1px, var(--line-strong) 1px, transparent 0) 0 0 / 18px 18px,
+        var(--surface-2);
+    }
+    .c-ul { grid-area: ul; } .c-studio { grid-area: studio; }
+    .c-robot { grid-area: robot; flex-direction: row; }
+    .c-robot .visual { border-bottom: 0; border-right: 1px solid var(--line); flex: 0 0 46%; display: flex; }
+    .c-robot .slot { aspect-ratio: auto; flex: 1; min-height: 260px; }
+    .cell .text { min-width: 0; }
+    .c-player { grid-area: player; }
+    .slot {
+      margin: 0; width: 100%; aspect-ratio: 16 / 10; min-height: 160px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+      color: var(--muted); font: 400 12px/1 var(--mono);
+      background: repeating-linear-gradient(135deg, var(--surface-2) 0 10px, var(--surface) 10px 20px);
+    }
+    .slot i { font-size: 22px; }
+    @media (max-width: 900px) {
+      .bento {
+        grid-template-columns: 1fr;
+        grid-template-areas: "gfx" "ul" "studio" "robot" "player";
+      }
+      .c-robot { flex-direction: column; }
+      .c-robot .visual { border-right: 0; border-bottom: 1px solid var(--line); flex: none; }
+      .c-robot .slot { aspect-ratio: 16 / 10; min-height: 160px; }
+    }
+
+    /* About */
+    .about .wrap { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); gap: 56px; }
+    .about .body { margin-top: 20px; font-size: 1.0625rem; }
+    .about .body + .body { margin-top: 14px; }
+    .timeline { list-style: none; margin: 0; padding: 0; }
+    .timeline li { position: relative; padding: 0 0 32px 28px; border-left: 1px solid var(--line-strong); }
+    .timeline li:last-child { padding-bottom: 0; }
+    .timeline li::before {
+      content: ""; position: absolute; left: -5px; top: 6px;
+      width: 9px; height: 9px; background: var(--bg); border: 1px solid var(--accent);
+    }
+    .timeline .when { font: 400 13px/1 var(--mono); color: var(--muted); }
+    .timeline h3 { font-size: 1.1rem; margin: 8px 0 6px; letter-spacing: -0.01em; }
+    .timeline p { color: var(--muted); }
+    @media (max-width: 860px) { .about .wrap { grid-template-columns: 1fr; gap: 40px; } }
+
+    /* Contact */
+    .contact h2 { font-size: clamp(2rem, 4.4vw, 3.25rem); max-width: 18ch; line-height: 1.08; }
+    .contact .body { margin-top: 16px; }
+    .contact-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+
+    footer { border-top: 1px solid var(--line); padding: 28px 0; color: var(--muted); font: 400 13px/1 var(--mono); }
+
+    /* Motion: entrance and scroll reveal, only when the user allows motion */
+    @media (prefers-reduced-motion: no-preference) {
+      .rise { opacity: 0; animation: rise .9s var(--ease) forwards; animation-delay: calc(var(--i, 0) * 90ms); }
+      @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+      .js .reveal { opacity: 0; transform: translateY(18px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+      .js .reveal.in { opacity: 1; transform: none; }
+    }
   </style>
 </head>
 <body>
-  <main>
-    <h1>Your Name</h1>
-    <p class="lead">Developer. Replace this text with a one-line intro.</p>
+  <header class="nav">
+    <div class="wrap">
+      <a class="brand" href="#top">Adrian Pulido</a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#projects" data-i18n="nav.projects">Projects</a>
+        <a href="#about" data-i18n="nav.about">About</a>
+        <a href="#contact" data-i18n="nav.contact">Contact</a>
+      </nav>
+      <div class="tools">
+        <div class="lang" role="group" aria-label="Language">
+          <button type="button" data-lang="en" aria-pressed="true">EN</button>
+          <button type="button" data-lang="es" aria-pressed="false">ES</button>
+        </div>
+        <button type="button" class="icon-btn" id="theme-toggle" aria-label="Toggle dark mode">
+          <i class="ph ph-moon" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+  </header>
 
-    <h2>Projects</h2>
-    <p>Add your projects here.</p>
+  <main id="top">
+    <section class="hero">
+      <div class="wrap">
+        <div>
+          <p class="eyebrow rise" style="--i:0" data-i18n="hero.eyebrow">Embedded software engineer</p>
+          <h1 class="rise" style="--i:1" data-i18n="hero.title">Firmware from the I/O pin to the touchscreen.</h1>
+          <p class="lead rise" style="--i:2" data-i18n="hero.lead">I'm Adrian Pulido. I build bare-metal control platforms, graphics engines and robots on ARM Cortex-M, MSP430 and ESP32.</p>
+          <div class="ctas rise" style="--i:3">
+            <a class="btn btn-primary" href="#projects"><span data-i18n="cta.projects">View projects</span> <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+            <a class="btn btn-ghost" href="#contact" data-i18n="cta.contact">Contact</a>
+          </div>
+        </div>
 
-    <h2>Contact</h2>
-    <p><a href="mailto:you@example.com">you@example.com</a></p>
+        <figure class="rise" style="--i:2">
+          <svg class="diagram" id="system-diagram" viewBox="0 0 360 440" role="img" aria-labelledby="sd-title">
+            <title id="sd-title" data-i18n="diagram.alt">Block diagram: the HMI talks to the controller over UART, the controller talks to the I/O board over SPI, and the I/O board drives sensors, outputs and Modbus devices.</title>
+            <defs>
+              <marker id="arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path class="d-arrow" d="M0,0 L8,4 L0,8 z"/>
+              </marker>
+            </defs>
 
-    <h2>API check</h2>
-    <p>Response from <code>/api/hello</code>: <span id="api-status">loading…</span></p>
+            <path id="l1" class="d-link" d="M180,80 L180,140" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+            <text class="d-label" x="192" y="114">UART</text>
+            <path id="l2" class="d-link" d="M180,212 L180,272" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+            <text class="d-label" x="192" y="246">SPI</text>
+            <path id="l3" class="d-link" d="M130,344 L90,392" marker-end="url(#arrow)"/>
+            <path id="l4" class="d-link" d="M230,344 L270,392" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+            <text class="d-label" x="262" y="366">RS-485</text>
+
+            <rect class="d-box" x="50" y="8" width="260" height="72"/>
+            <text class="d-title" x="66" y="38">HMI</text>
+            <text class="d-sub" x="66" y="60" data-i18n="diagram.hmiSub">TM4C1294 + FT812 touch display</text>
+
+            <rect class="d-box" x="50" y="140" width="260" height="72"/>
+            <text class="d-title" x="66" y="170" data-i18n="diagram.ctrl">Controller</text>
+            <text class="d-sub" x="66" y="192" data-i18n="diagram.ctrlSub">TM4C1294 + Lua 5.5 runtime</text>
+
+            <rect class="d-box accent" x="50" y="272" width="260" height="72"/>
+            <text class="d-title" x="66" y="302" data-i18n="diagram.io">I/O and safety supervisor</text>
+            <text class="d-sub" x="66" y="324">MSP430 + ADS1216 ADC</text>
+
+            <rect class="d-ghost" x="10" y="392" width="160" height="44"/>
+            <text class="d-sub" x="24" y="419" data-i18n="diagram.field">Sensors, outputs</text>
+            <rect class="d-ghost" x="190" y="392" width="160" height="44"/>
+            <text class="d-sub" x="204" y="419" data-i18n="diagram.modbus">Modbus RTU devices</text>
+
+            <circle class="packet" r="3.5"><animateMotion dur="2.2s" repeatCount="indefinite" path="M180,84 L180,136"/></circle>
+            <circle class="packet" r="3.5"><animateMotion dur="2.2s" begin="1.1s" repeatCount="indefinite" path="M180,136 L180,84"/></circle>
+            <circle class="packet" r="3.5"><animateMotion dur="1.6s" repeatCount="indefinite" path="M180,216 L180,268"/></circle>
+            <circle class="packet" r="3.5"><animateMotion dur="1.6s" begin="0.8s" repeatCount="indefinite" path="M180,268 L180,216"/></circle>
+          </svg>
+          <figcaption data-i18n="hero.caption">Architecture of a control platform I built at Telecontrol. The I/O board has the final say over every physical output.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section toolkit" aria-labelledby="toolkit-title">
+      <div class="wrap">
+        <div class="reveal">
+          <h2 id="toolkit-title" data-i18n="toolkit.title">What I work with</h2>
+        </div>
+        <div class="groups reveal">
+          <div class="group">
+            <h3 data-i18n="toolkit.mcu">Microcontrollers</h3>
+            <div class="chips"><span class="chip">TM4C1294 (Cortex-M4F)</span><span class="chip">MSP430F248</span><span class="chip">ESP32</span></div>
+          </div>
+          <div class="group">
+            <h3 data-i18n="toolkit.periph">Peripherals and displays</h3>
+            <div class="chips"><span class="chip">EPI SDRAM</span><span class="chip">uDMA</span><span class="chip">QuadSPI</span><span class="chip">FT812 / EVE</span><span class="chip">ADS1216</span><span class="chip">PCNT</span><span class="chip">MCPWM</span></div>
+          </div>
+          <div class="group">
+            <h3 data-i18n="toolkit.proto">Protocols</h3>
+            <div class="chips"><span class="chip">UART</span><span class="chip">SPI</span><span class="chip">CAN</span><span class="chip">RS-485 Modbus RTU</span><span class="chip">LoRa</span><span class="chip">USB MSC</span></div>
+          </div>
+          <div class="group">
+            <h3 data-i18n="toolkit.sw">Languages and runtimes</h3>
+            <div class="chips"><span class="chip">C</span><span class="chip">C++</span><span class="chip">Embedded Lua</span><span class="chip">FreeRTOS</span><span class="chip">ESP-IDF</span><span class="chip">Python / PyQt</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section featured" id="projects" aria-labelledby="featured-title">
+      <div class="wrap">
+        <div class="reveal">
+          <p class="eyebrow" data-i18n="featured.eyebrow">Featured project</p>
+          <h2 id="featured-title" data-i18n="featured.title">TeleControl v4: a three-board control platform</h2>
+          <p class="meta"><strong>Telecontrol</strong><br><span data-i18n="featured.meta">Sole developer and tester. Internal platform for the company's HVAC installations.</span></p>
+          <p class="body" data-i18n="featured.body">The successor to Telecontrol's previous controller: an HMI, a scriptable controller and an I/O board that supervises every output, all bare-metal on TM4C1294 and MSP430.</p>
+        </div>
+
+        <div class="highlights">
+          <article class="hl reveal">
+            <i class="ph ph-shield-check" aria-hidden="true"></i>
+            <h3 data-i18n="hl.safety.t">Safety lives in the I/O board</h3>
+            <p data-i18n="hl.safety.p">Minimum-on, maximum-on and cooldown limits per output, a latched emergency stop, and safe outputs on link loss or stale readings. Scripts request outputs; they never own a pin.</p>
+          </article>
+          <article class="hl reveal">
+            <i class="ph ph-code" aria-hidden="true"></i>
+            <h3 data-i18n="hl.lua.t">Lua 5.5 on a Cortex-M4</h3>
+            <p data-i18n="hl.lua.p">Control logic runs as scripts in bounded scan cycles with static allocation only. Production scripts and timing maps are stored encrypted on SD and load at boot.</p>
+          </article>
+          <article class="hl reveal">
+            <i class="ph ph-arrows-left-right" aria-hidden="true"></i>
+            <h3 data-i18n="hl.proto.t">Versioned wire protocols</h3>
+            <p data-i18n="hl.proto.p">UART between HMI and controller, SPI to the I/O board, RS-485 Modbus RTU to field devices. Both ends of a link change together.</p>
+          </article>
+          <article class="hl reveal">
+            <i class="ph ph-flask" aria-hidden="true"></i>
+            <h3 data-i18n="hl.test.t">Tested before it reaches a board</h3>
+            <p data-i18n="hl.test.p">Host-side C unit tests with mocks, a PyQt HVAC plant simulator wired to the real controller, and architecture decision records.</p>
+          </article>
+        </div>
+
+        <div class="next reveal">
+          <span class="mono" data-i18n="next.label">Next: v4.1</span>
+          <p data-i18n="next.body">Planned as a full PLC replacement with product-grade quality.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="more-title">
+      <div class="wrap">
+        <h2 id="more-title" class="reveal" data-i18n="more.title">More projects</h2>
+
+        <div class="bento">
+          <article class="cell c-gfx reveal">
+            <div class="visual">
+              <svg class="diagram" viewBox="0 0 520 200" role="img" aria-labelledby="gfx-title">
+                <title id="gfx-title" data-i18n="gfx.alt">Rendering pipeline: widgets are drawn into an RGB565 framebuffer in SDRAM and sent to the FT812 over DMA and SPI, while graph traces go straight to the FT812 display list.</title>
+                <rect class="d-box" x="0" y="16" width="130" height="58"/>
+                <text class="d-title" x="14" y="41" data-i18n="gfx.widgets">Widgets</text>
+                <text class="d-sub" x="14" y="61" data-i18n="gfx.widgetsSub">forms, text, images</text>
+
+                <rect class="d-box" x="176" y="16" width="168" height="58"/>
+                <text class="d-title" x="190" y="41" data-i18n="gfx.fb">Framebuffer</text>
+                <text class="d-sub" x="190" y="61" data-i18n="gfx.fbSub">RGB565 in SDRAM</text>
+
+                <rect class="d-box accent" x="396" y="16" width="124" height="168"/>
+                <text class="d-title" x="410" y="41">FT812</text>
+                <text class="d-sub" x="410" y="61">EVE</text>
+
+                <rect class="d-box" x="0" y="126" width="130" height="58"/>
+                <text class="d-title" x="14" y="151" data-i18n="gfx.graphs">Graph traces</text>
+                <text class="d-sub" x="14" y="171" data-i18n="gfx.graphsSub">fast refresh</text>
+
+                <path class="d-link" d="M130,45 L172,45" marker-end="url(#arrow)"/>
+                <path class="d-link" d="M344,45 L392,45" marker-end="url(#arrow)"/>
+                <text class="d-label" x="350" y="34">DMA</text>
+                <path class="d-link" d="M130,155 L392,155" marker-end="url(#arrow)"/>
+                <text class="d-label" x="190" y="146" data-i18n="gfx.dl">display list</text>
+              </svg>
+            </div>
+            <div class="text">
+              <h3 data-i18n="gfx.t">Hybrid graphics engine for FT812 displays</h3>
+              <p data-i18n="gfx.p">Software widgets render into a framebuffer in external SDRAM and stream to the display controller over DMA, while graph traces use the FT812's own display list. Themes, BDF fonts, gestures and video, shared by three products through one adapter interface. It grew out of about twenty hardware prototypes.</p>
+              <div class="tags"><span class="tag">TM4C1294</span><span class="tag">FT812</span><span class="tag">uDMA</span><span class="tag">C</span><span class="tag" data-i18n="tag.sole">Sole developer</span></div>
+            </div>
+          </article>
+
+          <article class="cell c-ul reveal">
+            <!-- TODO: photo of the UL tester touchscreen, 16:10 -->
+            <div class="visual"><figure class="slot"><i class="ph ph-camera" aria-hidden="true"></i><span data-i18n="slot.photo">Photo coming soon</span></figure></div>
+            <div class="text">
+              <h3 data-i18n="ul.t">UL overcurrent tester</h3>
+              <p data-i18n="ul.p">Test bench firmware with fault-current, crush and sequence tests, a CAN link to the instrumentation board, logging and test files on SD. The first product on the graphics engine.</p>
+              <div class="tags"><span class="tag">CAN</span><span class="tag">EPI SDRAM</span><span class="tag">QuadSPI</span></div>
+            </div>
+          </article>
+
+          <article class="cell c-studio reveal">
+            <!-- TODO: screenshot of the HMI designer, 16:10 -->
+            <div class="visual"><figure class="slot"><i class="ph ph-image" aria-hidden="true"></i><span data-i18n="slot.shot">Screenshot coming soon</span></figure></div>
+            <div class="text">
+              <h3 data-i18n="studio.t">HMI screen designer</h3>
+              <p data-i18n="studio.p">A desktop editor for the graphics engine: draw screens, preview them pixel-accurate with the device fonts, and generate the C files the firmware compiles.</p>
+              <div class="tags"><span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag" data-i18n="tag.codegen">C code generation</span></div>
+            </div>
+          </article>
+
+          <article class="cell c-robot reveal">
+            <!-- TODO: photo of the Cornelio robot in the field, 4:3 -->
+            <div class="visual"><figure class="slot"><i class="ph ph-camera" aria-hidden="true"></i><span data-i18n="slot.photo">Photo coming soon</span></figure></div>
+            <div class="text">
+              <h3 data-i18n="robot.t">Autonomous seed-planting robot</h3>
+              <p data-i18n="robot.p">My engineering thesis, built with a team of four; I wrote most of the firmware. The ESP32 master runs FreeRTOS tasks for traction PID, odometry, waypoint navigation and the planting mechanism, with LoRa telemetry to a base station.</p>
+              <div class="tags"><span class="tag">ESP32</span><span class="tag">FreeRTOS</span><span class="tag">PID</span><span class="tag">LoRa</span></div>
+              <a class="link" href="https://github.com/audience6killer/Cornelio_Master_v1" target="_blank" rel="noopener"><span data-i18n="link.code">Source code</span> <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+            </div>
+          </article>
+
+          <article class="cell c-player reveal">
+            <!-- TODO: screenshot of qtAmberol, 16:10 -->
+            <div class="visual"><figure class="slot"><i class="ph ph-image" aria-hidden="true"></i><span data-i18n="slot.shot">Screenshot coming soon</span></figure></div>
+            <div class="text">
+              <h3 data-i18n="player.t">Desktop music player</h3>
+              <p data-i18n="player.p">A PyQt5 take on GNOME's Amberol. Colors follow the album art, and a background thread computes the waveform seek bar.</p>
+              <a class="link" href="https://github.com/audience6killer/qtAmberol_v0" target="_blank" rel="noopener"><span data-i18n="link.code">Source code</span> <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section about" id="about" aria-labelledby="about-title">
+      <div class="wrap">
+        <div class="reveal">
+          <h2 id="about-title" data-i18n="about.title">About</h2>
+          <p class="body" data-i18n="about.p1">I'm an embedded software engineer in Mexico City. At Telecontrol I design, write and test the firmware and tools behind the company's control platforms, from the safety supervisor to the touchscreen.</p>
+          <p class="body" data-i18n="about.p2">I care about firmware that stays predictable under failure: bounded loops, static memory, versioned protocols, and documentation good enough for the next engineer to change it safely.</p>
+        </div>
+        <ol class="timeline reveal">
+          <li>
+            <!-- TODO: start date at Telecontrol -->
+            <p class="when" data-i18n="tl.now">Present</p>
+            <h3 data-i18n="tl.job.t">Embedded software developer, Telecontrol</h3>
+            <p data-i18n="tl.job.p">Control platforms, a graphics engine, test equipment firmware and desktop tooling.</p>
+          </li>
+          <li>
+            <!-- TODO: university, degree name and year -->
+            <p class="when" data-i18n="tl.thesis.when">Thesis</p>
+            <h3 data-i18n="tl.thesis.t">Engineering degree</h3>
+            <p data-i18n="tl.thesis.p">Thesis: firmware for an autonomous seed-planting robot.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section contact" id="contact" aria-labelledby="contact-title">
+      <div class="wrap reveal">
+        <h2 id="contact-title" data-i18n="contact.title">Looking for my next embedded software role.</h2>
+        <p class="body" data-i18n="contact.body">If your team builds firmware for real hardware, I would like to hear from you.</p>
+        <div class="contact-links">
+          <!-- TODO: confirm the public email address -->
+          <a class="btn btn-primary" href="mailto:" hidden><i class="ph ph-envelope-simple" aria-hidden="true"></i> Email</a>
+          <!-- TODO: LinkedIn URL -->
+          <a class="btn btn-ghost" href="#" hidden><i class="ph ph-linkedin-logo" aria-hidden="true"></i> LinkedIn</a>
+          <a class="btn btn-ghost" href="https://github.com/audience6killer" target="_blank" rel="noopener"><i class="ph ph-github-logo" aria-hidden="true"></i> GitHub</a>
+          <!-- TODO: CV PDF in English and Spanish -->
+          <a class="btn btn-ghost" href="#" hidden><i class="ph ph-file-pdf" aria-hidden="true"></i> CV</a>
+        </div>
+      </div>
+    </section>
   </main>
 
+  <footer>
+    <div class="wrap">&copy; 2026 Adrian Pulido</div>
+  </footer>
+
   <script>
-    fetch("/api/hello")
-      .then(function (r) { return r.json(); })
-      .then(function (d) { document.getElementById("api-status").textContent = d.message; })
-      .catch(function () { document.getElementById("api-status").textContent = "unavailable (run with vercel dev)"; });
+    var ES = {
+      "nav.projects": "Proyectos",
+      "nav.about": "Sobre mí",
+      "nav.contact": "Contacto",
+      "hero.eyebrow": "Ingeniero de software embebido",
+      "hero.title": "Firmware del pin de E/S a la pantalla táctil.",
+      "hero.lead": "Soy Adrian Pulido. Desarrollo plataformas de control bare-metal, motores gráficos y robots en ARM Cortex-M, MSP430 y ESP32.",
+      "hero.caption": "Arquitectura de una plataforma de control que construí en Telecontrol. La tarjeta de E/S tiene la última palabra sobre cada salida física.",
+      "cta.projects": "Ver proyectos",
+      "cta.contact": "Contacto",
+      "diagram.alt": "Diagrama de bloques: la HMI se comunica con el controlador por UART, el controlador con la tarjeta de E/S por SPI, y la tarjeta de E/S maneja sensores, salidas y equipos Modbus.",
+      "diagram.hmiSub": "TM4C1294 + pantalla táctil FT812",
+      "diagram.ctrl": "Controlador",
+      "diagram.ctrlSub": "TM4C1294 + runtime Lua 5.5",
+      "diagram.io": "E/S y supervisor de seguridad",
+      "diagram.field": "Sensores, salidas",
+      "diagram.modbus": "Equipos Modbus RTU",
+      "toolkit.title": "Con qué trabajo",
+      "toolkit.mcu": "Microcontroladores",
+      "toolkit.periph": "Periféricos y pantallas",
+      "toolkit.proto": "Protocolos",
+      "toolkit.sw": "Lenguajes y entornos",
+      "featured.eyebrow": "Proyecto principal",
+      "featured.title": "TeleControl v4: plataforma de control de tres tarjetas",
+      "featured.meta": "Único desarrollador y tester. Plataforma interna para las instalaciones HVAC de la empresa.",
+      "featured.body": "La sucesora del controlador anterior de Telecontrol: una HMI, un controlador programable por scripts y una tarjeta de E/S que supervisa cada salida, todo bare-metal sobre TM4C1294 y MSP430.",
+      "hl.safety.t": "La seguridad vive en la tarjeta de E/S",
+      "hl.safety.p": "Tiempos mínimo y máximo de encendido y enfriamiento por salida, paro de emergencia con enclavamiento, y salidas seguras ante pérdida de enlace o lecturas obsoletas. Los scripts solicitan salidas; nunca controlan un pin.",
+      "hl.lua.t": "Lua 5.5 en un Cortex-M4",
+      "hl.lua.p": "La lógica de control corre como scripts en ciclos de escaneo acotados, solo con memoria estática. Los scripts de producción y los mapas de tiempos se guardan cifrados en SD y se cargan al arrancar.",
+      "hl.proto.t": "Protocolos versionados",
+      "hl.proto.p": "UART entre HMI y controlador, SPI hacia la tarjeta de E/S y RS-485 Modbus RTU hacia los equipos de campo. Ambos extremos de un enlace cambian juntos.",
+      "hl.test.t": "Probado antes de llegar a una tarjeta",
+      "hl.test.p": "Pruebas unitarias en C sobre la PC con mocks, un simulador de planta HVAC en PyQt conectado al controlador real, y registros de decisiones de arquitectura.",
+      "next.label": "Siguiente: v4.1",
+      "next.body": "Planeada como reemplazo completo de un PLC, con calidad de producto.",
+      "more.title": "Más proyectos",
+      "gfx.alt": "Flujo de render: los widgets se dibujan en un framebuffer RGB565 en SDRAM y se envían al FT812 por DMA y SPI, mientras las gráficas van directo a la display list del FT812.",
+      "gfx.widgets": "Widgets",
+      "gfx.widgetsSub": "formularios, texto, imágenes",
+      "gfx.fb": "Framebuffer",
+      "gfx.fbSub": "RGB565 en SDRAM",
+      "gfx.graphs": "Gráficas",
+      "gfx.graphsSub": "refresco rápido",
+      "gfx.dl": "display list",
+      "gfx.t": "Motor gráfico híbrido para pantallas FT812",
+      "gfx.p": "Los widgets se dibujan en un framebuffer en SDRAM externa y se envían al controlador de pantalla por DMA, mientras las gráficas usan la display list del propio FT812. Temas, fuentes BDF, gestos y video, compartido por tres productos a través de una sola interfaz de adaptador. Surgió de unos veinte prototipos en hardware.",
+      "tag.sole": "Único desarrollador",
+      "tag.codegen": "Generación de código C",
+      "slot.photo": "Foto próximamente",
+      "slot.shot": "Captura próximamente",
+      "ul.t": "Probador de sobrecorriente UL",
+      "ul.p": "Firmware de banco de pruebas con pruebas de corriente de falla, aplastamiento y secuencias, enlace CAN con la tarjeta de instrumentación, registro de datos y archivos de prueba en SD. El primer producto sobre el motor gráfico.",
+      "studio.t": "Diseñador de pantallas HMI",
+      "studio.p": "Un editor de escritorio para el motor gráfico: dibuja pantallas, las previsualiza con precisión de pixel usando las fuentes del equipo y genera los archivos C que compila el firmware.",
+      "robot.t": "Robot sembrador autónomo",
+      "robot.p": "Mi tesis de ingeniería, hecha en un equipo de cuatro; escribí la mayor parte del firmware. El ESP32 maestro corre tareas FreeRTOS para el PID de tracción, odometría, navegación por waypoints y el mecanismo de siembra, con telemetría LoRa a una estación base.",
+      "link.code": "Código fuente",
+      "player.t": "Reproductor de música de escritorio",
+      "player.p": "Una versión en PyQt5 de Amberol de GNOME. Los colores siguen la portada del álbum y un hilo en segundo plano calcula la barra de forma de onda.",
+      "about.title": "Sobre mí",
+      "about.p1": "Soy ingeniero de software embebido en la Ciudad de México. En Telecontrol diseño, programo y pruebo el firmware y las herramientas de las plataformas de control de la empresa, desde el supervisor de seguridad hasta la pantalla táctil.",
+      "about.p2": "Me importa que el firmware sea predecible ante fallas: ciclos acotados, memoria estática, protocolos versionados y documentación suficiente para que el siguiente ingeniero lo cambie con seguridad.",
+      "tl.now": "Actualidad",
+      "tl.job.t": "Desarrollador de software embebido, Telecontrol",
+      "tl.job.p": "Plataformas de control, un motor gráfico, firmware para equipo de pruebas y herramientas de escritorio.",
+      "tl.thesis.when": "Tesis",
+      "tl.thesis.t": "Ingeniería",
+      "tl.thesis.p": "Tesis: firmware para un robot sembrador autónomo.",
+      "contact.title": "Busco mi siguiente puesto en software embebido.",
+      "contact.body": "Si tu equipo desarrolla firmware para hardware real, me gustaría saber de ti."
+    };
+    var META = {
+      en: { title: document.title, desc: document.querySelector('meta[name="description"]').content },
+      es: { title: "Adrian Pulido, ingeniero de software embebido", desc: "Adrian Pulido desarrolla plataformas de control bare-metal, motores gráficos y robots en ARM Cortex-M, MSP430 y ESP32." }
+    };
+
+    var nodes = document.querySelectorAll("[data-i18n]");
+    var EN = {};
+    nodes.forEach(function (n) { EN[n.dataset.i18n] = n.textContent; });
+
+    function setLang(lang) {
+      var dict = lang === "es" ? ES : EN;
+      nodes.forEach(function (n) {
+        var v = dict[n.dataset.i18n];
+        if (v != null) n.textContent = v;
+      });
+      document.documentElement.lang = lang;
+      document.title = META[lang].title;
+      document.querySelector('meta[name="description"]').content = META[lang].desc;
+      document.querySelectorAll("[data-lang]").forEach(function (b) {
+        b.setAttribute("aria-pressed", String(b.dataset.lang === lang));
+      });
+      try { localStorage.setItem("lang", lang); } catch (e) {}
+    }
+    document.querySelectorAll("[data-lang]").forEach(function (b) {
+      b.addEventListener("click", function () { setLang(b.dataset.lang); });
+    });
+    var saved = null;
+    try { saved = localStorage.getItem("lang"); } catch (e) {}
+    var initial = saved || ((navigator.language || "en").toLowerCase().indexOf("es") === 0 ? "es" : "en");
+    if (initial !== "en") setLang(initial);
+
+    // Theme toggle: follows the system until the visitor picks one.
+    var root = document.documentElement;
+    var themeBtn = document.getElementById("theme-toggle");
+    var mq = window.matchMedia("(prefers-color-scheme: dark)");
+    function isDark() { return root.dataset.theme ? root.dataset.theme === "dark" : mq.matches; }
+    function syncThemeIcon() {
+      themeBtn.firstElementChild.className = "ph " + (isDark() ? "ph-sun" : "ph-moon");
+    }
+    themeBtn.addEventListener("click", function () {
+      root.dataset.theme = isDark() ? "light" : "dark";
+      try { localStorage.setItem("theme", root.dataset.theme); } catch (e) {}
+      syncThemeIcon();
+    });
+    mq.addEventListener("change", syncThemeIcon);
+    syncThemeIcon();
+
+    // Reduced motion: stop the data packets in the diagram.
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    var sd = document.getElementById("system-diagram");
+    function applyMotion() {
+      if (reduce.matches) { sd.pauseAnimations(); sd.querySelectorAll(".packet").forEach(function (p) { p.style.display = "none"; }); }
+      else { sd.unpauseAnimations(); sd.querySelectorAll(".packet").forEach(function (p) { p.style.display = ""; }); }
+    }
+    reduce.addEventListener("change", applyMotion);
+    applyMotion();
+
+    // Scroll reveal.
+    var revealEls = document.querySelectorAll(".reveal");
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+        });
+      }, { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
+      revealEls.forEach(function (el) { io.observe(el); });
+    } else {
+      revealEls.forEach(function (el) { el.classList.add("in"); });
+    }
   </script>
 </body>
 </html>
