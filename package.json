@@ -1,0 +1,9 @@
+{
+  "name": "dev-portafolio",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Developer portfolio deployed on Vercel",
+  "scripts": {
+    "dev": "npx vercel dev"
+  }
+}
