@@ -134,8 +134,11 @@
       line-height: 1.04; margin: 0 0 16px; max-width: 19ch;
     }
     .hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
-    .hero figure { margin: 0; justify-self: center; width: 100%; max-width: 440px; }
-    .hero figcaption { margin-top: 12px; font: 400 13px/1.5 var(--mono); color: var(--muted); }
+    .hero .portrait { justify-self: center; width: 100%; max-width: 400px; aspect-ratio: 4 / 5; }
+    .featured-head { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 56px; align-items: center; }
+    .featured-diagram { margin: 0; justify-self: center; width: 100%; max-width: 420px; }
+    .featured-diagram figcaption { margin-top: 12px; font: 400 13px/1.5 var(--mono); color: var(--muted); }
+    @media (max-width: 860px) { .featured-head { grid-template-columns: 1fr; gap: 40px; } }
     @media (max-width: 860px) {
       .hero .wrap { grid-template-columns: 1fr; }
     }
@@ -199,7 +202,6 @@
     .d-link { stroke: var(--line-strong); stroke-width: 1.4; fill: none; }
     .d-label { font: 500 11px var(--mono); fill: var(--accent); letter-spacing: 0.04em; }
     .d-arrow { fill: var(--line-strong); }
-    .packet { fill: var(--accent); }
 
     /* Sections */
     section { scroll-margin-top: 72px; }
@@ -295,8 +297,7 @@
     }
 
     /* About */
-    .about .wrap { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); gap: 56px; align-items: start; }
-    .about .slot { aspect-ratio: 4 / 5; max-width: 360px; }
+
     .about .body { margin-top: 20px; font-size: 1.0625rem; }
     .about .body + .body { margin-top: 14px; }
     .timeline { list-style: none; margin: 0; padding: 0; }
@@ -369,47 +370,8 @@
           </div>
         </div>
 
-        <figure class="rise" style="--i:2">
-          <svg class="diagram" id="system-diagram" viewBox="0 0 360 440" role="img" aria-labelledby="sd-title">
-            <title id="sd-title" data-i18n="diagram.alt">Block diagram: the HMI talks to the controller over UART, the controller talks to the I/O board over SPI, and the I/O board drives sensors, outputs and Modbus devices.</title>
-            <defs>
-              <marker id="arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-                <path class="d-arrow" d="M0,0 L8,4 L0,8 z"/>
-              </marker>
-            </defs>
-
-            <path id="l1" class="d-link" d="M180,80 L180,140" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
-            <text class="d-label" x="192" y="114">UART</text>
-            <path id="l2" class="d-link" d="M180,212 L180,272" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
-            <text class="d-label" x="192" y="246">SPI</text>
-            <path id="l3" class="d-link" d="M130,344 L90,392" marker-end="url(#arrow)"/>
-            <path id="l4" class="d-link" d="M230,344 L270,392" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
-            <text class="d-label" x="262" y="366">RS-485</text>
-
-            <rect class="d-box" x="50" y="8" width="260" height="72"/>
-            <text class="d-title" x="66" y="38">HMI</text>
-            <text class="d-sub" x="66" y="60" data-i18n="diagram.hmiSub">TM4C1294 + FT812 touch display</text>
-
-            <rect class="d-box" x="50" y="140" width="260" height="72"/>
-            <text class="d-title" x="66" y="170" data-i18n="diagram.ctrl">Controller</text>
-            <text class="d-sub" x="66" y="192" data-i18n="diagram.ctrlSub">TM4C1294 + Lua 5.5 runtime</text>
-
-            <rect class="d-box accent" x="50" y="272" width="260" height="72"/>
-            <text class="d-title" x="66" y="302" data-i18n="diagram.io">I/O and safety supervisor</text>
-            <text class="d-sub" x="66" y="324">MSP430 + ADS1216 ADC</text>
-
-            <rect class="d-ghost" x="10" y="392" width="160" height="44"/>
-            <text class="d-sub" x="24" y="419" data-i18n="diagram.field">Sensors, outputs</text>
-            <rect class="d-ghost" x="190" y="392" width="160" height="44"/>
-            <text class="d-sub" x="204" y="419" data-i18n="diagram.modbus">Modbus RTU devices</text>
-
-            <circle class="packet" r="3.5"><animateMotion dur="2.2s" repeatCount="indefinite" path="M180,84 L180,136"/></circle>
-            <circle class="packet" r="3.5"><animateMotion dur="2.2s" begin="1.1s" repeatCount="indefinite" path="M180,136 L180,84"/></circle>
-            <circle class="packet" r="3.5"><animateMotion dur="1.6s" repeatCount="indefinite" path="M180,216 L180,268"/></circle>
-            <circle class="packet" r="3.5"><animateMotion dur="1.6s" begin="0.8s" repeatCount="indefinite" path="M180,268 L180,216"/></circle>
-          </svg>
-          <figcaption data-i18n="hero.caption">Architecture of a control platform I built at Telecontrol. The I/O board has the final say over every physical output.</figcaption>
-        </figure>
+        <!-- TODO: portrait photo of Adrian, 4:5, at least 800x1000 -->
+        <figure class="slot portrait rise" style="--i:2"><i class="ph ph-user" aria-hidden="true"></i><span data-i18n="slot.portrait">Portrait coming soon</span></figure>
       </div>
     </section>
 
@@ -454,6 +416,7 @@
 
     <section class="section featured" id="projects" aria-labelledby="featured-title">
       <div class="wrap">
+        <div class="featured-head">
         <div class="reveal">
           <p class="eyebrow" data-i18n="featured.eyebrow">Featured project</p>
           <h2 id="featured-title" data-i18n="featured.title">TeleControl v4: a three-board control platform</h2>
@@ -463,6 +426,43 @@
             <i class="ph ph-lock-simple" aria-hidden="true"></i>
             <p data-i18n="featured.note">The platform is proprietary, so there is no code or repository here. What I can share is how it is built and why: the architecture and the engineering decisions behind it.</p>
           </div>
+        </div>
+          <figure class="featured-diagram reveal">
+            <svg class="diagram" viewBox="0 0 360 440" role="img" aria-labelledby="sd-title">
+              <title id="sd-title" data-i18n="diagram.alt">Block diagram: the HMI talks to the controller over UART, the controller talks to the I/O board over SPI, and the I/O board drives sensors, outputs and Modbus devices.</title>
+              <defs>
+                <marker id="arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path class="d-arrow" d="M0,0 L8,4 L0,8 z"/>
+                </marker>
+              </defs>
+  
+              <path id="l1" class="d-link" d="M180,80 L180,140" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+              <text class="d-label" x="192" y="114">UART</text>
+              <path id="l2" class="d-link" d="M180,212 L180,272" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+              <text class="d-label" x="192" y="246">SPI</text>
+              <path id="l3" class="d-link" d="M130,344 L90,392" marker-end="url(#arrow)"/>
+              <path id="l4" class="d-link" d="M230,344 L270,392" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+              <text class="d-label" x="262" y="366">RS-485</text>
+  
+              <rect class="d-box" x="50" y="8" width="260" height="72"/>
+              <text class="d-title" x="66" y="38">HMI</text>
+              <text class="d-sub" x="66" y="60" data-i18n="diagram.hmiSub">TM4C1294 + FT812 touch display</text>
+  
+              <rect class="d-box" x="50" y="140" width="260" height="72"/>
+              <text class="d-title" x="66" y="170" data-i18n="diagram.ctrl">Controller</text>
+              <text class="d-sub" x="66" y="192" data-i18n="diagram.ctrlSub">TM4C1294 + Lua 5.5 runtime</text>
+  
+              <rect class="d-box accent" x="50" y="272" width="260" height="72"/>
+              <text class="d-title" x="66" y="302" data-i18n="diagram.io">I/O and safety supervisor</text>
+              <text class="d-sub" x="66" y="324">MSP430 + ADS1216 ADC</text>
+  
+              <rect class="d-ghost" x="10" y="392" width="160" height="44"/>
+              <text class="d-sub" x="24" y="419" data-i18n="diagram.field">Sensors, outputs</text>
+              <rect class="d-ghost" x="190" y="392" width="160" height="44"/>
+              <text class="d-sub" x="204" y="419" data-i18n="diagram.modbus">Modbus RTU devices</text>
+            </svg>
+            <figcaption data-i18n="diagram.caption">The I/O board has the final say over every physical output.</figcaption>
+          </figure>
         </div>
 
         <div class="highlights">
@@ -585,8 +585,6 @@
           <p class="body" data-i18n="about.p1">I'm an embedded software engineer in Mexico City. At Telecontrol I design, write and test the firmware and tools behind the company's control platforms, from the safety supervisor to the touchscreen.</p>
           <p class="body" data-i18n="about.p2">I care about firmware that stays predictable under failure: bounded loops, static memory, versioned protocols, and documentation good enough for the next engineer to change it safely.</p>
         </div>
-        <!-- TODO: portrait photo, 4:5 -->
-        <figure class="slot reveal"><i class="ph ph-user" aria-hidden="true"></i><span data-i18n="slot.portrait">Portrait coming soon</span></figure>
       </div>
     </section>
 
@@ -659,7 +657,7 @@
       "featured.note": "La plataforma es propietaria, así que aquí no hay código ni repositorio. Lo que sí puedo compartir es cómo está construida y por qué: la arquitectura y las decisiones de ingeniería detrás de ella.",
       "slot.video": "Video próximamente",
       "slot.portrait": "Retrato próximamente",
-      "hero.caption": "Arquitectura de una plataforma de control que construí en Telecontrol. La tarjeta de E/S tiene la última palabra sobre cada salida física.",
+      "diagram.caption": "La tarjeta de E/S tiene la última palabra sobre cada salida física.",
       "cta.projects": "Ver proyectos",
       "cta.contact": "Contacto",
       "diagram.alt": "Diagrama de bloques: la HMI se comunica con el controlador por UART, el controlador con la tarjeta de E/S por SPI, y la tarjeta de E/S maneja sensores, salidas y equipos Modbus.",
@@ -765,15 +763,6 @@
     mq.addEventListener("change", syncThemeIcon);
     syncThemeIcon();
 
-    // Reduced motion: stop the data packets in the diagram.
-    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-    var sd = document.getElementById("system-diagram");
-    function applyMotion() {
-      if (reduce.matches) { sd.pauseAnimations(); sd.querySelectorAll(".packet").forEach(function (p) { p.style.display = "none"; }); }
-      else { sd.unpauseAnimations(); sd.querySelectorAll(".packet").forEach(function (p) { p.style.display = ""; }); }
-    }
-    reduce.addEventListener("change", applyMotion);
-    applyMotion();
 
     // Scroll reveal.
     var revealEls = document.querySelectorAll(".reveal");
