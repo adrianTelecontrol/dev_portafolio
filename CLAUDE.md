@@ -21,5 +21,8 @@ Personal developer portfolio, deployed on Vercel.
 - Never commit secrets. Configure them as Vercel environment variables, and list names only in `.env.example`.
 - Pages must work at phone width and in light and dark mode.
 
+## Working with other projects
+- To see another project (an app from another repo, a reference website), ask the user for screenshots or take a screenshot of its live URL. Never clone, install, build or run another project to render it without asking first: it costs a lot of time and tokens and rarely gives a faithful result.
+
 ## Deploy
 Pushes to the default branch deploy to production once the repo is imported in the Vercel dashboard. Other branches and PRs get preview deployments.
