@@ -7,6 +7,12 @@ to private repos. Nothing here is published until it is written into the site.
 
 Open items for the owner are marked **TODO**.
 
+## Owner
+- Adrian Pulido, Mexico City. Targeting embedded software positions.
+- Site in Spanish and English.
+- Work project names may not be publishable: present them under descriptive
+  names, decided project by project.
+
 ## Work (adrianTelecontrol, TM4C1294 + FT812 platform)
 
 ### 1. TeleControl v4: three-board PLC-style control platform (flagship, private)
@@ -35,7 +41,9 @@ Open items for the owner are marked **TODO**.
   architecture decision records, documented safety model.
 - Early prototype: first port of the Lua interpreter to TM4C1294 with SD, USB,
   EEPROM and SDRAM drivers (`ccs_new_platform_dev_workpace`, private).
-- **TODO**: role (lead/solo/team), dates, deployment status, measurable results.
+- Role: sole software developer and tester. All firmware, tools, tests and docs
+  in the repo are Adrian's.
+- **TODO**: dates, deployment status, measurable results.
 
 ### 2. TeleGUI: reusable embedded graphics engine (private)
 - Hybrid renderer for TM4C1294 + FT812: widgets composed into an RGB565
@@ -45,6 +53,7 @@ Open items for the owner are marked **TODO**.
   decoding, gesture recognition, video, FatFs storage port.
 - Single product-to-engine adapter contract; engine never depends on product
   code. Versioned releases consumed as a git submodule by three products.
+- Role: sole developer and tester.
 - **TODO**: frame rates, memory footprint, or other numbers if measured.
 
 ### 3. UL overcurrent tester firmware (public: `UL-Overcurrent-AI`)
@@ -96,7 +105,9 @@ Open items for the owner are marked **TODO**.
     encoders, 25 kHz MCPWM, 10 ms PID.
 - Unit test tasks for traction, seed planter, data center, waypoint follower.
   Docker devcontainer for reproducible builds.
-- **TODO**: context (thesis, competition, team?), your role, results.
+- Context: undergraduate thesis, team of four; Adrian wrote almost all the
+  firmware.
+- **TODO**: read the thesis for goals, hardware, results; photos or video.
 
 ### 7. qtAmberol: desktop music player (`qtAmberol_v0`)
 - PyQt5 reimplementation of the GNOME player Amberol with a reworked UI,
